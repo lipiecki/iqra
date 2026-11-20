@@ -28,7 +28,7 @@ function intervals(model)
         results = loadpanel(model, market, 25)
         ace, pips = Vector{Vector{String}}(), Vector{Vector{String}}()
         for (i, method) in enumerate(METHODS)
-            push!(ace, [LABELS[i]; [fmt((u-l) - 100 * mean(mean((q.pred[:, l] .< q.obs) .& (q.obs .< q.pred[:, u])) for q in results[method])) for (l, u) in bounds]])
+            push!(ace, [LABELS[i]; [fmt((u-l) - 100 * mean(mean((q.pred[:, l] .< q.obs) .& (q.obs .<= q.pred[:, u])) for q in results[method])) for (l, u) in bounds]])
             push!(pips, [LABELS[i]; [fmt(mean(mean(PostForecasts.pinball(q)[[l, u]]) for q in results[method])) for (l, u) in bounds]])
         end
         header = ["Method", "1-99%", "2-98%", "5-95%", "10-90%"]
